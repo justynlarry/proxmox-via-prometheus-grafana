@@ -66,7 +66,9 @@ mkdir ~/monitoring && cd ~/monitoring
 nano docker-compose.yml
 ```
 Paste the following:
+```
 yaml
+```
 ```
 services:
   prometheus:
