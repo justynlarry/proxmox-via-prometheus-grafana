@@ -384,6 +384,15 @@ Here are a few example panels from the running monitoring stack. These were buil
 
 - CPU Temperature:
 <img width="1527" height="422" alt="image" src="https://github.com/user-attachments/assets/7b7a3e90-d29d-47a8-8c3d-b584d84629ca" />
+<img width="1524" height="427" alt="image" src="https://github.com/user-attachments/assets/37f8d20c-c819-4fa5-b99f-88006064aeeb" />
+
+- Current CPU Usage
+<img width="1526" height="420" alt="image" src="https://github.com/user-attachments/assets/306fea45-cd00-487c-ab21-79c0fec9c452" />
+<img width="1527" height="425" alt="image" src="https://github.com/user-attachments/assets/05930c12-78ec-4ec9-b9a9-9f4d132a7b2c" />
+
+- Broad Overview, including Current Memory by VM, Current Allocated Memory, Storage, Drive Temperatures, and Drive Status:
+<img width="1908" height="796" alt="image" src="https://github.com/user-attachments/assets/6eaf114c-6b84-4a07-9c2f-00b2ca216a3d" />
+
 
 
 
