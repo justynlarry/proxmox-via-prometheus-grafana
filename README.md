@@ -395,7 +395,7 @@ Key Metrics to Monitor
 - smartctl_device_attribute{attribute_name=...}
 
 Troubleshooting
-Exporter not working? Check service logs with journalctl -u <service>
+Exporter not working? Check service logs with journalctl -u <service> -f
 
 SMART permissions?
 bash
