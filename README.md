@@ -217,7 +217,8 @@ Repeat for each node.
 Install Node Exporter on each node:
 
 bash
-```cd /tmp
+```
+cd /tmp
 wget https://github.com/prometheus/node_exporter/releases/download/v1.8.1/node_exporter-1.8.1.linux-amd64.tar.gz
 tar -xzf node_exporter-1.8.1.linux-amd64.tar.gz
 sudo mv node_exporter-*/node_exporter /usr/local/bin/
@@ -226,7 +227,8 @@ sudo mv node_exporter-*/node_exporter /usr/local/bin/
 Create systemd unit:
 
 bash
-```sudo nano /etc/systemd/system/node_exporter.service
+```
+sudo nano /etc/systemd/system/node_exporter.service
 ini
 Copy
 Edit
@@ -321,63 +323,53 @@ scrape_configs:
       - targets: ['node1:9633', 'node2:9633', 'node3:9633', 'node4:9633']
 ```
 Restart Prometheus:
-```bash
-
+bash
+```
 docker-compose restart prometheus
 ```
-7. Grafana Dashboard Setup
-Access Grafana at http://<host>:3000
+# 7. Grafana Dashboard Setup
+1. Access Grafana at http://<host_IP>:3000
 
-Add Prometheus as a data source
+2. Add Prometheus as a data source
 
-Import dashboards:
-
-Node Exporter Full (ID: 1860)
-
-SMART + NVMe status (ID: 16514 or 22381)
+3. Import dashboards:
+- Node Exporter Full (ID: 1860)
+- SMART + NVMe status (ID: 16514 or 22381)
 
 Example Queries:
 CPU Temp Gauge:
-
 arduino
-Copy
-Edit
+```
 node_cpu_temp_celsius{job="cpu_temp_exporter"}
+```
 Disk Health:
-
 arduino
-Copy
-Edit
+```
 smartctl_device_smart_status{job="smartctl_exporter"}
+```
 Drive Temps:
-
 arduino
-Copy
-Edit
+```
 smartctl_device_temperature{job="smartctl_exporter", temperature_type="current"}
-📊 Key Metrics to Monitor
-node_cpu_temp_celsius
+```
+Key Metrics to Monitor
+- node_cpu_temp_celsius
+- node_cpu_seconds_total, node_memory_MemAvailable_bytes
+- pve_cluster_status, pve_node_up, pve_vmid_up
+- smartctl_device_smart_status, smartctl_device_temperature
+- smartctl_device_attribute{attribute_name=...}
 
-node_cpu_seconds_total, node_memory_MemAvailable_bytes
-
-pve_cluster_status, pve_node_up, pve_vmid_up
-
-smartctl_device_smart_status, smartctl_device_temperature
-
-smartctl_device_attribute{attribute_name=...}
-
-🧰 Troubleshooting
+Troubleshooting
 Exporter not working? Check service logs with journalctl -u <service>
 
 SMART permissions?
-
 bash
-Copy
-Edit
+```
 sudo setcap cap_sys_rawio+ep /usr/sbin/smartctl
 sudo usermod -a -G disk smartctl_exporter
+```
 Prometheus target down?
 Check Prometheus → Status → Targets
 
-🤝 Contributing
+# Contributing
 Pull requests and issues welcome! Improve instructions or submit fixes for edge cases you encounter.
