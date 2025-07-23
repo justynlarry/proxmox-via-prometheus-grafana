@@ -43,38 +43,31 @@ This repository outlines how to build a full-featured monitoring solution for a 
 
 - Centralized Monitoring: Prometheus scrapes all data; Grafana visualizes it.
 
-🏗️ Architecture Overview
-Component	Description
-Proxmox Nodes	Run: node_exporter, smartctl_exporter, and cpu_temp_exporter
-Prometheus	Collects metrics from all exporters (Docker)
-Grafana	Dashboards for system metrics (Docker)
-pve-exporter	Gathers Proxmox API data from one cluster node
+# Architecture Overview
+Component	        Description
+Proxmox Nodes	    Run: node_exporter, smartctl_exporter, and cpu_temp_exporter
+Prometheus	      Collects metrics from all exporters (Docker)
+Grafana	          Dashboards for system metrics (Docker)
+pve-exporter	    Gathers Proxmox API data from one cluster node
 
-🔧 Prerequisites
-A running 4-node Proxmox VE cluster
+# Prerequisites
+- A running 4-node Proxmox VE cluster
+- sudo access on all nodes
+- A server (or Proxmox node/VM) with Docker + Docker Compose installed
+- Basic familiarity with Linux & Prometheus/Grafana
 
-sudo access on all nodes
-
-A server (or Proxmox node/VM) with Docker + Docker Compose installed
-
-Basic familiarity with Linux & Prometheus/Grafana
-
-🛠️ Setup Instructions
+# Setup Instructions
 1. Prometheus & Grafana Setup (Docker Compose)
 Run these services on a central node or dedicated VM.
 
 bash
-Copy
-Edit
+```
 mkdir ~/monitoring && cd ~/monitoring
 nano docker-compose.yml
+```
 Paste the following:
-
 yaml
-Copy
-Edit
-version: '3.8'
-
+```
 services:
   prometheus:
     image: prom/prometheus:latest
@@ -112,6 +105,7 @@ volumes:
 networks:
   monitoring_net:
     driver: bridge
+```
 Then:
 
 bash
