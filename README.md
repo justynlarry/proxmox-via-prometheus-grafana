@@ -56,6 +56,13 @@ pve-exporter	    Gathers Proxmox API data from one cluster node
 - A server (or Proxmox node/VM) with Docker + Docker Compose installed
 - Basic familiarity with Linux & Prometheus/Grafana
 
+# My Automation Scripts Repository Contains:
+The repository below contains scripts that may be helpful:
+https://github.com/jlarry77/automation_scripts
+- Docker/Containerd Install Script:  https://github.com/jlarry77/automation_scripts/tree/main/docker-containerd-install
+- A Prometheus Monitor Script - Automates the deployment of a Prometheus Node Exporter container using Docker Compose: https://github.com/jlarry77/automation_scripts/tree/main/prometheus-monitor
+
+
 # Setup Instructions
 # 1. Prometheus & Grafana Setup (Docker Compose)
 Run these services on a central node or dedicated VM.
@@ -66,6 +73,7 @@ mkdir ~/monitoring && cd ~/monitoring
 nano docker-compose.yml
 ```
 Paste the following:
+
 yaml
 ```
 services:
@@ -107,12 +115,14 @@ networks:
     driver: bridge
 ```
 Then:
+
 bash
 ```
 mkdir -p prometheus
 nano prometheus/prometheus.yml
 ```
 Paste:
+
 yaml
 
 ```
@@ -126,6 +136,7 @@ scrape_configs:
       - targets: ['localhost:9090']
 ```
 Start everything:
+
 bash
 ```
 docker-compose up -d
@@ -134,13 +145,15 @@ docker-compose up -d
 Install prometheus-pve-exporter on one node. Ensure it scrapes the cluster API and is added to your Prometheus config later.
 
 # 3. Custom CPU Temperature Exporter
-Step 1: Install Dependencies
+Step 1: Install Dependencies:
+
 bash
 ```
 sudo apt update
 sudo apt install lm-sensors python3-pip python3.11-venv
 ```
-Step 2: Set Up Python Virtual Environment
+Step 2: Set Up Python Virtual Environment:
+
 bash
 ```
 python3 -m venv /root/pve-exporter-env
@@ -148,12 +161,14 @@ source /root/pve-exporter-env/bin/activate
 pip install prometheus_client
 deactivate
 ```
-Step 3: Create Exporter Script
+Step 3: Create Exporter Script:
+
 bash
 ```
 sudo nano /usr/local/bin/cpu_temp_exporter.py
 ```
 Paste:
+
 python
 ```
 #!/usr/bin/env python3
@@ -180,11 +195,13 @@ if __name__ == "__main__":
         time.sleep(15)
 ```
 Make the Script Executeable:
+
 bash
 ```
 sudo chmod +x /usr/local/bin/cpu_temp_exporter.py
 ```
-Step 4: Create the Systemd Service
+Step 4: Create the Systemd Service:
+
 bash
 ```
 sudo nano /etc/systemd/system/cpu-temp-exporter.service
@@ -206,6 +223,7 @@ User=root
 WantedBy=multi-user.target
 ```
 Reload Daemon, enable and start systemd service:
+
 bash
 ```
 sudo systemctl daemon-reload
@@ -213,7 +231,8 @@ sudo systemctl enable --now cpu-temp-exporter.service
 ```
 Repeat for each node.
 
-4. Node Exporter Setup
+# 4. Node Exporter Setup
+
 Install Node Exporter on each node:
 
 bash
@@ -250,8 +269,9 @@ sudo systemctl daemon-reload
 sudo systemctl enable --now node_exporter
 ```
 
-5. Smartctl Exporter Setup
-Install:
+5. Smartctl Exporter Setup:
+   
+Install Smartmontools:
 
 bash
 ```
@@ -260,6 +280,7 @@ sudo apt install smartmontools
 ```
 
 Add binary and systemd service:
+
 bash
 ```
 cd /tmp
@@ -274,7 +295,9 @@ sudo setcap cap_sys_rawio+ep /usr/sbin/smartctl
 sudo useradd -r -s /sbin/nologin smartctl_exporter
 sudo usermod -aG disk smartctl_exporter
 ```
+
 Create systemd unit:
+
 bash
 ```
 sudo nano /etc/systemd/system/smartctl_exporter.service
@@ -296,13 +319,15 @@ Restart=always
 WantedBy=multi-user.target
 ```
 Reload Daemon, enable and start systemd process:
+
 bash
 ```
 sudo systemctl daemon-reload
 sudo systemctl enable --now smartctl_exporter
 ```
-6. Prometheus Configuration Update
+6. Prometheus Configuration Update:
 Edit prometheus.yml:
+
 yaml
 ```
 scrape_configs:
@@ -323,6 +348,7 @@ scrape_configs:
       - targets: ['node1:9633', 'node2:9633', 'node3:9633', 'node4:9633']
 ```
 Restart Prometheus:
+
 bash
 ```
 docker-compose restart prometheus
