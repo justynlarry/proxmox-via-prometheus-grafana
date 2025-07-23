@@ -57,18 +57,16 @@ pve-exporter	    Gathers Proxmox API data from one cluster node
 - Basic familiarity with Linux & Prometheus/Grafana
 
 # Setup Instructions
-1. Prometheus & Grafana Setup (Docker Compose)
+# 1. Prometheus & Grafana Setup (Docker Compose)
 Run these services on a central node or dedicated VM.
 
-```
 bash
+```
 mkdir ~/monitoring && cd ~/monitoring
 nano docker-compose.yml
 ```
 Paste the following:
-```
 yaml
-```
 ```
 services:
   prometheus:
@@ -109,17 +107,15 @@ networks:
     driver: bridge
 ```
 Then:
-
 bash
-Copy
-Edit
+```
 mkdir -p prometheus
 nano prometheus/prometheus.yml
+```
 Paste:
-
 yaml
-Copy
-Edit
+
+```
 global:
   scrape_interval: 15s
   evaluation_interval: 15s
@@ -128,40 +124,38 @@ scrape_configs:
   - job_name: 'prometheus'
     static_configs:
       - targets: ['localhost:9090']
+```
 Start everything:
-
 bash
-Copy
-Edit
+```
 docker-compose up -d
-2. PVE Exporter Setup
+```
+# 2. PVE Exporter Setup
 Install prometheus-pve-exporter on one node. Ensure it scrapes the cluster API and is added to your Prometheus config later.
 
-3. Custom CPU Temperature Exporter
+#  . Custom CPU Temperature Exporter
 Step 1: Install Dependencies
 bash
-Copy
-Edit
+```
 sudo apt update
 sudo apt install lm-sensors python3-pip python3.11-venv
+```
 Step 2: Set Up Python Virtual Environment
 bash
-Copy
-Edit
+```
 python3 -m venv /root/pve-exporter-env
 source /root/pve-exporter-env/bin/activate
 pip install prometheus_client
 deactivate
+```
 Step 3: Create Exporter Script
 bash
-Copy
-Edit
+```
 sudo nano /usr/local/bin/cpu_temp_exporter.py
+```
 Paste:
-
 python
-Copy
-Edit
+```
 #!/usr/bin/env python3
 from prometheus_client import Gauge, start_http_server
 import subprocess, time
@@ -184,16 +178,19 @@ if __name__ == "__main__":
     while True:
         cpu_temp.set(read_cpu_temp())
         time.sleep(15)
+```
+Make the Script Executeable:
 bash
-Copy
-Edit
+```
 sudo chmod +x /usr/local/bin/cpu_temp_exporter.py
-Step 4: Systemd Service
+```
+Step 4: Create the Systemd Service
 bash
-Copy
-Edit
+```
 sudo nano /etc/systemd/system/cpu-temp-exporter.service
+```
 ini
+```
 Copy
 Edit
 [Unit]
@@ -207,29 +204,29 @@ User=root
 
 [Install]
 WantedBy=multi-user.target
+```
+Reload Daemon, enable and start systemd service:
 bash
-Copy
-Edit
+```
 sudo systemctl daemon-reload
 sudo systemctl enable --now cpu-temp-exporter.service
+```
 Repeat for each node.
 
 4. Node Exporter Setup
 Install Node Exporter on each node:
 
 bash
-Copy
-Edit
-cd /tmp
+```cd /tmp
 wget https://github.com/prometheus/node_exporter/releases/download/v1.8.1/node_exporter-1.8.1.linux-amd64.tar.gz
 tar -xzf node_exporter-1.8.1.linux-amd64.tar.gz
 sudo mv node_exporter-*/node_exporter /usr/local/bin/
+```
+
 Create systemd unit:
 
 bash
-Copy
-Edit
-sudo nano /etc/systemd/system/node_exporter.service
+```sudo nano /etc/systemd/system/node_exporter.service
 ini
 Copy
 Edit
@@ -249,34 +246,35 @@ Copy
 Edit
 sudo systemctl daemon-reload
 sudo systemctl enable --now node_exporter
+```
+
 5. Smartctl Exporter Setup
 Install:
 
 bash
-Copy
-Edit
+```
 sudo apt update
 sudo apt install smartmontools
-Add binary and systemd service:
+```
 
+Add binary and systemd service:
 bash
-Copy
-Edit
+```
 cd /tmp
 wget https://github.com/prometheus-community/smartctl_exporter/releases/download/v0.14.0/smartctl_exporter-0.14.0.linux-amd64.tar.gz
 tar -xzf smartctl_exporter-*.tar.gz
 sudo mv smartctl_exporter-*/smartctl_exporter /usr/local/bin/
+```
+
 bash
-Copy
-Edit
+```
 sudo setcap cap_sys_rawio+ep /usr/sbin/smartctl
 sudo useradd -r -s /sbin/nologin smartctl_exporter
 sudo usermod -aG disk smartctl_exporter
+```
 Create systemd unit:
-
 bash
-Copy
-Edit
+```
 sudo nano /etc/systemd/system/smartctl_exporter.service
 ini
 Copy
@@ -294,17 +292,17 @@ Restart=always
 
 [Install]
 WantedBy=multi-user.target
+```
+Reload Daemon, enable and start systemd process:
 bash
-Copy
-Edit
+```
 sudo systemctl daemon-reload
 sudo systemctl enable --now smartctl_exporter
+```
 6. Prometheus Configuration Update
 Edit prometheus.yml:
-
 yaml
-Copy
-Edit
+```
 scrape_configs:
   - job_name: 'pve_exporter'
     static_configs:
@@ -321,12 +319,12 @@ scrape_configs:
   - job_name: 'smartctl_exporter'
     static_configs:
       - targets: ['node1:9633', 'node2:9633', 'node3:9633', 'node4:9633']
+```
 Restart Prometheus:
+```bash
 
-bash
-Copy
-Edit
 docker-compose restart prometheus
+```
 7. Grafana Dashboard Setup
 Access Grafana at http://<host>:3000
 
