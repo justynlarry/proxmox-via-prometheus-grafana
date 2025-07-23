@@ -60,8 +60,8 @@ pve-exporter	    Gathers Proxmox API data from one cluster node
 1. Prometheus & Grafana Setup (Docker Compose)
 Run these services on a central node or dedicated VM.
 
-bash
 ```
+bash
 mkdir ~/monitoring && cd ~/monitoring
 nano docker-compose.yml
 ```
