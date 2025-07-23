@@ -133,7 +133,7 @@ docker-compose up -d
 # 2. PVE Exporter Setup
 Install prometheus-pve-exporter on one node. Ensure it scrapes the cluster API and is added to your Prometheus config later.
 
-#  . Custom CPU Temperature Exporter
+# 3. Custom CPU Temperature Exporter
 Step 1: Install Dependencies
 bash
 ```
