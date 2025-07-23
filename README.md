@@ -378,6 +378,15 @@ arduino
 ```
 smartctl_device_temperature{job="smartctl_exporter", temperature_type="current"}
 ```
+
+# Example Dashboards:
+Here are a few example panels from the running monitoring stack. These were built using the Node Exporter, CPU Temperature Exporter, and smartctl_exporter.
+
+- CPU Temperature:
+<img width="1527" height="422" alt="image" src="https://github.com/user-attachments/assets/7b7a3e90-d29d-47a8-8c3d-b584d84629ca" />
+
+
+
 Key Metrics to Monitor
 - node_cpu_temp_celsius
 - node_cpu_seconds_total, node_memory_MemAvailable_bytes
