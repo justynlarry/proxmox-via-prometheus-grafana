@@ -150,7 +150,7 @@ Step 1: Install Dependencies:
 bash
 ```
 sudo apt update
-sudo apt install lm-sensors python3-pip python3.11-venv
+sudo apt install lm-sensors python3-pip python3-venv
 ```
 Step 2: Set Up Python Virtual Environment:
 
@@ -208,8 +208,6 @@ sudo nano /etc/systemd/system/cpu-temp-exporter.service
 ```
 ini
 ```
-Copy
-Edit
 [Unit]
 Description=Custom CPU Temperature Exporter for Prometheus
 After=network.target
@@ -248,9 +246,8 @@ Create systemd unit:
 bash
 ```
 sudo nano /etc/systemd/system/node_exporter.service
-ini
-Copy
-Edit
+```
+```
 [Unit]
 Description=Node Exporter
 After=network-online.target
@@ -269,7 +266,7 @@ sudo systemctl daemon-reload
 sudo systemctl enable --now node_exporter
 ```
 
-5. Smartctl Exporter Setup:
+# 5. Smartctl Exporter Setup:
    
 Install Smartmontools:
 
@@ -301,9 +298,6 @@ Create systemd unit:
 bash
 ```
 sudo nano /etc/systemd/system/smartctl_exporter.service
-ini
-Copy
-Edit
 [Unit]
 Description=Prometheus Smartctl Exporter
 After=network-online.target
@@ -325,7 +319,7 @@ bash
 sudo systemctl daemon-reload
 sudo systemctl enable --now smartctl_exporter
 ```
-6. Prometheus Configuration Update:
+# 6. Prometheus Configuration Update:
 Edit prometheus.yml:
 
 yaml
