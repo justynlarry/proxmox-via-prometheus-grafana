@@ -259,9 +259,9 @@ ExecStart=/usr/local/bin/node_exporter
 
 [Install]
 WantedBy=multi-user.target
+```
 bash
-Copy
-Edit
+```
 sudo systemctl daemon-reload
 sudo systemctl enable --now node_exporter
 ```
