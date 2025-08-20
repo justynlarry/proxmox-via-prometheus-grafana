@@ -310,7 +310,7 @@ Wants=network-online.target
 [Service]
 User=smartctl_exporter
 Group=smartctl_exporter
-ExecStart=/usr/local/bin/smartctl_exporter --smartctl.interval=60s --smartctl.device-include="^/dev/(nvme[0-9]+n[0-9]+|sd[a-z])$"
+ExecStart=/usr/local/bin/smartctl_exporter --smartctl.interval=60s 
 Restart=always
 
 [Install]
