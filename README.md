@@ -247,6 +247,7 @@ bash
 ```
 sudo nano /etc/systemd/system/node_exporter.service
 ```
+bash
 ```
 [Unit]
 Description=Node Exporter
@@ -298,6 +299,9 @@ Create systemd unit:
 bash
 ```
 sudo nano /etc/systemd/system/smartctl_exporter.service
+```
+bash
+```
 [Unit]
 Description=Prometheus Smartctl Exporter
 After=network-online.target
